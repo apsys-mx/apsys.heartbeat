@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="Scrutor" Version="4.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\apsys.ndbunit.netcore\apsys.ndbunit.netcore.csproj" />
+    <ProjectReference Include="..\apsys.heartbeat.repositories.nhibernate\apsys.heartbeat.repositories.nhibernate.csproj" />
+    <ProjectReference Include="..\apsys.heartbeat.repositories\apsys.heartbeat.repositories.csproj" />
+    <ProjectReference Include="..\apsys.heartbeat.services\apsys.heartbeat.services.csproj" />
+  </ItemGroup>
+
+</Project>
