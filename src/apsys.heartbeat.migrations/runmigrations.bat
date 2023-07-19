@@ -1,6 +1,6 @@
 echo off
 cd bin/Debug/net6.0
-template.migrations.exe /cnn:"Server=.;Database=databasename.devel;Trusted_Connection=True;"
+apsys.heartbeat.migrations /cnn:"Server=.;Database=apsys.heartbeat.devel;Trusted_Connection=True;"
 cd../../..
 echo on
 pause
