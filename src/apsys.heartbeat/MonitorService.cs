@@ -8,15 +8,19 @@ namespace apsys.heartbeat
 {
     public class MonitorService
     {
-
+        public string Id { get; set; }
         public double IntervalMinutes { get; set; }
 
-        public async Task Start()
-        {
-            PeriodicTimer timer = new(TimeSpan.FromMilliseconds(this.IntervalMinutes));
-            while (await timer.WaitForNextTickAsync()){
 
-            }
+        public MonitorService() 
+        { 
+            this.Id = Guid.NewGuid().ToString();
+        }
+
+        public MonitorService(double intervalMinutes)
+        {
+            this.Id = Guid.NewGuid().ToString();
+            this.IntervalMinutes = intervalMinutes;
         }
     }
 }

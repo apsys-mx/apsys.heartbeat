@@ -1,7 +1,9 @@
 ﻿using apsys.heartbeat.repositories;
 using apsys.heartbeat.repositories.nhibernate;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 
 namespace apsys.heartbeat.webapi.Infraestructure
 {
@@ -72,16 +74,28 @@ namespace apsys.heartbeat.webapi.Infraestructure
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
+        /// <summary>
+        /// Start monitoring services
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="configuration"></param>
         public static void StartMonitorServices(this IServiceCollection services, IConfiguration configuration)
         {
             SessionFactory builderFactory = new SessionFactory(configuration);
             var sessionFactory = builderFactory.BuildNHibernateSessionFactory();
             var session = sessionFactory.OpenSession();
 
-            IUnitOfWork uow = new UnitOfWork(session, null, configuration);
+            using var loggerFactory = LoggerFactory.Create(loggingBuilder => loggingBuilder
+                .SetMinimumLevel(LogLevel.Trace)
+                .AddLog4Net());
+            var unitOfWorkLogger = loggerFactory.CreateLogger<UnitOfWork>();
+            IUnitOfWork uow = new UnitOfWork(session, unitOfWorkLogger, configuration);
 
             foreach (var monitorService in uow.Monitors.GetRegisteded())
-                services.AddHostedService(provider => new MonitorServiceHost(null, monitorService));
+            {
+                var monitorServiceLogger = loggerFactory.CreateLogger<MonitorServiceHost>();
+                services.AddSingleton<IHostedService>(provider => new MonitorServiceHost(monitorServiceLogger, monitorService));
+            }
         }
     }
 }

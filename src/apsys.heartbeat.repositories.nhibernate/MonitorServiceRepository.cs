@@ -18,7 +18,9 @@ namespace apsys.heartbeat.repositories.nhibernate
         {
             var list = new List<MonitorService>
             {
-                new MonitorService()
+                new MonitorService(5),
+                new MonitorService(3),
+                new MonitorService(10)
             };
             return list;
         }
