@@ -1,3 +1,4 @@
+using apsys.heartbeat.repositories.nhibernate;
 using apsys.heartbeat.services.users;
 using apsys.heartbeat.webapi.Infraestructure;
 using System.Reflection;
@@ -6,6 +7,7 @@ IConfiguration configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 configuration = builder.Configuration;
+
 
 // Add services to the container.
 
@@ -18,8 +20,12 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Appli
 //builder.Services.ConfigurePolicy();
 builder.Services.ConfigureCors(configuration);
 builder.Services.ConfigureUnitOfWork(configuration);
+builder.Services.StartMonitorServices(configuration);
+
 
 var app = builder.Build();
+var loggerFactory = app.Services.GetService<ILoggerFactory>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,9 +36,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
 app.UseRouting();
+
+app.UseAuthorization();
 
 app.UseCors("CorsPolicy");
 

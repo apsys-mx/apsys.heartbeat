@@ -71,5 +71,17 @@ namespace apsys.heartbeat.webapi.Infraestructure
             services.AddScoped(factory => sessionFactory.OpenSession());
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
+
+        public static void StartMonitorServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            SessionFactory builderFactory = new SessionFactory(configuration);
+            var sessionFactory = builderFactory.BuildNHibernateSessionFactory();
+            var session = sessionFactory.OpenSession();
+
+            IUnitOfWork uow = new UnitOfWork(session, null, configuration);
+
+            foreach (var monitorService in uow.Monitors.GetRegisteded())
+                services.AddHostedService(provider => new MonitorServiceHost(null, monitorService));
+        }
     }
 }

@@ -28,10 +28,12 @@ namespace apsys.heartbeat.repositories.nhibernate
 
             this.Users = new ApplicationUsersRepository(session, configuration);
             this.Roles = new ApplicationRolesRepository(session);
+            this.Monitors = new MonitorServiceRepository(session);
         }
 
         public IApplicationUsersRepository Users { get; private set; }
         public IApplicationRolesRepository Roles { get; private set; }
+        public IMonitorServiceRepository Monitors { get; private set; }
 
         public void Commit()
         {
