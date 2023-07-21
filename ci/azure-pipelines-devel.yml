@@ -1,0 +1,22 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  - devel
+
+pr: none
+
+pool:
+  name: "Azure Pipelines"
+  vmImage: "windows-latest"
+
+variables:
+  - name: projectName
+    value: "apsys.heartbeat"
+  - name: buildConfiguration
+    value: "Debug"
+
+extends:
+  template: base-pipeline.yml
+  parameters:
+    projectName: $(projectName)
+    buildConfiguration: $(buildConfiguration)

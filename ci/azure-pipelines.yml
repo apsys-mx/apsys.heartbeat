@@ -1,0 +1,40 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  - master
+
+pr: none
+
+pool:
+  name: "Default"
+  vmImage: "windows-latest"
+
+variables:
+  - group: project-variables-group
+  - name: buildPlatform
+    value: "Any CPU"
+  - name: projectName
+    value: "femsa.shareholders"
+  - name: buildConfiguration
+    value: "Release"
+  - name: packageSuffix
+    value: ""
+  - name: octopusChannel
+    value: "Default"
+  - name: octopusSpaceName
+    value: "Default"
+  - name: connectionString
+    value: "Server=localhost\\SQLEXPRESS;Database=femsaservicios.shareholders.devel;;User ID=devopsuser;Password=a9O5Kx2P;"
+  - name: environmentName
+    value: "Production"
+
+extends:
+  template: base-pipeline.yml
+  parameters:
+    projectName: $(projectName)
+    buildConfiguration: $(buildConfiguration)
+    octopusChannel: $(octopusChannel)
+    octopusSpaceName: $(octopusSpaceName)
+    connectionString: $(connectionString)
+    packageSuffix: $(packageSuffix)
+    environmentName: $(environmentName)

@@ -1,0 +1,31 @@
+parameters:
+  - name: buildConfiguration
+    type: string
+  - name: projectName
+    type: string
+  - name: baseFolder
+    type: string
+    default: ""
+  - name: packageSuffix
+    type: string
+  - name: octopusChannel
+    type: string
+  - name: octopusSpaceName
+    type: string
+  - name: connectionString
+    type: string
+  - name: testEnabled
+    type: boolean
+    default: false
+  - name: environmentName
+    type: string
+
+jobs:
+  - job: BuildSolution
+    displayName: Build and test solution
+    steps:
+      - template: build-solution.yml
+        parameters:
+          projectName: "${{parameters.projectName}}"
+          baseFolder: "${{parameters.baseFolder}}"
+          buildConfiguration: "${{parameters.buildConfiguration}}"
