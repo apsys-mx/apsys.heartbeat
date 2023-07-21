@@ -1,24 +1,12 @@
 parameters:
-  - name: buildConfiguration
-    type: string
   - name: projectName
     type: string
   - name: baseFolder
     type: string
-    default: ""
-  - name: packageSuffix
+    default: "src/"
+  - name: buildConfiguration
     type: string
-  - name: octopusChannel
-    type: string
-  - name: octopusSpaceName
-    type: string
-  - name: connectionString
-    type: string
-  - name: testEnabled
-    type: boolean
-    default: false
-  - name: environmentName
-    type: string
+    default: Debug
 
 jobs:
   - job: BuildSolution
