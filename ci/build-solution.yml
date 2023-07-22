@@ -16,8 +16,26 @@ steps:
       projects: "${{parameters.baseFolder}}${{parameters.projectName}}.sln"
       feedsToUse: "config"
       nugetConfigPath: "${{parameters.baseFolder}}NuGet.Config"
+
+  - task: SonarCloudPrepare@1
+    inputs:
+      SonarCloud: 'sonarqube'
+      organization: 'apsys-dev'
+      scannerMode: 'MSBuild'
+      projectKey: 'apsys-dev_apsys-heartbeat'
+      projectName: 'apsys-heartbeat'
+
   - task: DotNetCoreCLI@2
     displayName: "Build solution"
     inputs:
       projects: "${{parameters.baseFolder}}${{parameters.projectName}}.sln"
       arguments: "--configuration ${{parameters.buildConfiguration}}"
+
+  - task: SonarCloudAnalyze@1
+    inputs:
+      jdkversion: 'JAVA_HOME_11_X64'
+
+  - task: SonarCloudPublish@1
+    inputs:
+      pollingTimeoutSec: '300'
+
