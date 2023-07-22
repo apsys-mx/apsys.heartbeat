@@ -19,3 +19,16 @@ jobs:
           projectName: "${{parameters.projectName}}"
           baseFolder: "${{parameters.baseFolder}}"
           buildConfiguration: "${{parameters.buildConfiguration}}"
+      - task: SonarCloudPrepare@1
+        inputs:
+          SonarCloud: 'sonarqube'
+          organization: 'apsys-dev'
+          scannerMode: 'MSBuild'
+          projectKey: 'apsys-dev_apsys-heartbeat'
+          projectName: 'apsys-heartbeat'
+      - task: SonarCloudAnalyze@1
+        inputs:
+          jdkversion: 'JAVA_HOME_11_X64'
+      - task: SonarCloudPublish@1
+        inputs:
+          pollingTimeoutSec: '300'
