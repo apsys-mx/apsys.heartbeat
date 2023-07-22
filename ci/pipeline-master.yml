@@ -64,7 +64,6 @@ stages:
         displayName: Pack and push artifacts
         dependsOn: 'BuildTestSolution'
         steps:
-          - checkout: none
           - task: DotNetCoreCLI@2
             enabled: true
             displayName: "Pack and push webapi artifact"
