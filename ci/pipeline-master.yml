@@ -77,3 +77,4 @@ stages:
             nuGetDescription: "Package of the $(projectName) webapi project"
             packageSuffix: $(packageSuffix)
             octopusSpaceName: $(octopusSpaceName)
+            baseFolder: $(baseFolder)

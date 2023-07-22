@@ -1,7 +1,9 @@
 parameters:
+  - name: baseFolder
+    type: string
+    default: ""
   - name: buildConfiguration
     type: string
-    default: Debug
   - name: projectName
     type: string
   - name: nuGetTitle
@@ -10,7 +12,6 @@ parameters:
     type: string
   - name: packageSuffix
     type: string
-    default: ""
   - name: octopusSpaceName
     type: string
 
@@ -21,16 +22,16 @@ steps:
     inputs:
       command: "publish"
       publishWebProjects: false
-      projects: ${{parameters.projectName}}/${{parameters.projectName}}.csproj
+      projects: ${{parameters.baseFolder}}${{parameters.projectName}}/${{parameters.projectName}}.csproj
       zipAfterPublish: false
       arguments: "-c:${{parameters.buildConfiguration}}"
   - task: CmdLine@2
     enabled: true
     displayName: "Pack artifact ${{parameters.projectName}}"
     inputs:
-      script: '"ci/octo" pack --id="${{parameters.projectName}}" --format="NuPkg" --version="$(Build.BuildNumber)${{parameters.packageSuffix}}" --author="APSYS-MX" --title="${{parameters.projectName}}" --description="Femsa shareholders backend" --basePath="${{parameters.projectName}}/bin/${{parameters.buildConfiguration}}/net6.0/publish"'
+      script: '"ci/octo" pack --id="${{parameters.projectName}}" --format="NuPkg" --version="$(Build.BuildNumber)${{parameters.packageSuffix}}" --author="APSYS-MX" --title="${{parameters.projectName}}" --description="${{parameters.nuGetDescription}}" --basePath="${{parameters.baseFolder}}${{parameters.projectName}}/bin/${{parameters.buildConfiguration}}/net6.0/publish"'
   - task: CmdLine@2
     enabled: true
     displayName: "Push packages to Octopus"
     inputs:
-      script: '"ci/octo" push --package="${{parameters.projectName}}.$(Build.BuildNumber)${{parameters.packageSuffix}}.nupkg" --server="https://apsys-fs-cloud.octopus.app" --space="${{parameters.octopusSpaceName}}" --apiKey="$(OctopusAPIKey)"'
+      script: '"ci/octo" push --package="${{parameters.baseFolder}}${{parameters.projectName}}.$(Build.BuildNumber)${{parameters.packageSuffix}}.nupkg" --server="https://apsys-fs-cloud.octopus.app" --space="${{parameters.octopusSpaceName}}" --apiKey="$(OctopusAPIKey)"'
