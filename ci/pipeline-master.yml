@@ -1,0 +1,76 @@
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  - master
+
+pr: none
+
+pool:
+  name: "Azure Pipelines"
+  vmImage: "windows-latest"
+
+variables:
+  - name: projectName
+    value: "apsys.heartbeat"
+  - name: buildConfiguration
+    value: "Release"
+  - name: baseFolder
+    value: "src/"
+
+stages:
+  -stage: Build
+  displayName: Build and test stage
+
+  jobs:
+    - job: BuildTestSolution
+      displayName: Build and test solution
+      steps:
+        - checkout: self
+          fetchDepth: 0
+
+        - task: DotNetCoreCLI@2
+          displayName: "Restore packages"
+          inputs:
+            command: "restore"
+            projects: "$(baseFolder)$(projectName).sln"
+            feedsToUse: "config"
+            nugetConfigPath: "$(baseFolder)NuGet.Config"
+
+        - task: SonarCloudPrepare@1
+          displayName: "Prepare code analysis"
+          inputs:
+            SonarCloud: "sonarqube"
+            organization: "apsys-dev"
+            scannerMode: "MSBuild"
+            projectKey: "apsys-dev_apsys-heartbeat"
+            projectName: "apsys-heartbeat"
+
+        - task: DotNetCoreCLI@2
+          displayName: "Build solution"
+          inputs:
+            projects: "$(baseFolder)$(projectName).sln"
+            arguments: "--configuration $(buildConfiguration)"
+
+        - task: SonarCloudAnalyze@1
+          displayName: "Run code analysis"
+          inputs:
+            jdkversion: "JAVA_HOME_11_X64"
+
+        - task: SonarCloudPublish@1
+          displayName: "Publish code analysis result"
+          inputs:
+            pollingTimeoutSec: "300"
+
+    - job: PackPushArtifacts
+      displayName: Pack and push artifacts
+      steps:
+        - checkout: none
+        - task: DotNetCoreCLI@2
+          enabled: true
+          displayName: "Pack and push webapi artifact"
+          inputs:
+            command: "publish"
+            publishWebProjects: false
+            projects: $(baseFolder)apsys.heartbeat.webapi/apsys.heartbeat.webapi.csproj
+            zipAfterPublish: false
+            arguments: "-c:$(buildConfiguration)"

@@ -1,7 +1,9 @@
 name: $(Date:yyyyMMdd)$(Rev:.r)
 
 trigger:
-  - master
+  branches:
+    include:
+      - features/*
 
 pr: none
 
@@ -13,9 +15,9 @@ variables:
   - name: projectName
     value: "apsys.heartbeat"
   - name: buildConfiguration
-    value: "Release"
+    value: "Debug"
   - name: baseFolder
-    value: "src/"
+    value: 'src/'
 
 jobs:
   - job: BuildSolution
@@ -23,7 +25,7 @@ jobs:
     steps:
       - checkout: self
         fetchDepth: 0
-
+          
       - task: DotNetCoreCLI@2
         displayName: "Restore packages"
         inputs:
@@ -35,11 +37,11 @@ jobs:
       - task: SonarCloudPrepare@1
         displayName: "Prepare code analysis"
         inputs:
-          SonarCloud: "sonarqube"
-          organization: "apsys-dev"
-          scannerMode: "MSBuild"
-          projectKey: "apsys-dev_apsys-heartbeat"
-          projectName: "apsys-heartbeat"
+          SonarCloud: 'sonarqube'
+          organization: 'apsys-dev'
+          scannerMode: 'MSBuild'
+          projectKey: 'apsys-dev_apsys-heartbeat'
+          projectName: 'apsys-heartbeat'
 
       - task: DotNetCoreCLI@2
         displayName: "Build solution"
@@ -50,9 +52,9 @@ jobs:
       - task: SonarCloudAnalyze@1
         displayName: "Run code analysis"
         inputs:
-          jdkversion: "JAVA_HOME_11_X64"
+          jdkversion: 'JAVA_HOME_11_X64'
 
       - task: SonarCloudPublish@1
         displayName: "Publish code analysis result"
         inputs:
-          pollingTimeoutSec: "300"
+          pollingTimeoutSec: '300'
