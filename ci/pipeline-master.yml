@@ -17,9 +17,9 @@ variables:
     value: "Release"
   - name: baseFolder
     value: "src/"
-  - packageSuffix:
+  - name: packageSuffix
     value: ""
-  - octopusSpaceName:
+  - name: octopusSpaceName
     value: "apsys-mx"
 
 stages:
