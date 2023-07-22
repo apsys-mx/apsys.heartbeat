@@ -16,6 +16,10 @@ variables:
     value: "Release"
   - name: baseFolder
     value: "src/"
+  - packageSuffix:
+    value: ''
+  - octopusSpaceName:
+    value: 'apsys-mx'
 
 stages:
   - stage: Build
@@ -63,13 +67,12 @@ stages:
       - job: PackPushArtifacts
         displayName: Pack and push artifacts
         dependsOn: 'BuildTestSolution'
-        steps:
-          - task: DotNetCoreCLI@2
-            enabled: true
-            displayName: "Pack and push webapi artifact"
-            inputs:
-              command: "publish"
-              publishWebProjects: false
-              projects: $(baseFolder)apsys.heartbeat.webapi/apsys.heartbeat.webapi.csproj
-              zipAfterPublish: false
-              arguments: "-c:$(buildConfiguration)"
+        variables:
+          - template: pack-push-artifact.yml
+            parameters:
+              buildConfiguration: $(buildConfiguration)
+              projectName: "$(projectName).webapi"
+              nuGetTitle: "$(projectName) webpi package"
+              nuGetDescription: "Package of the $(projectName) webapi project"
+              packageSuffix: $(packageSuffix)
+              octopusSpaceName: $(octopusSpaceName)

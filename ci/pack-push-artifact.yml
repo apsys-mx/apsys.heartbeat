@@ -13,8 +13,6 @@ parameters:
     default: ""
   - name: octopusSpaceName
     type: string
-  - name: environmentName
-    type: string
 
 steps:
   - task: DotNetCoreCLI@2
