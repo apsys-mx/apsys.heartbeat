@@ -27,12 +27,12 @@ jobs:
         displayName: "Restore packages"
         inputs:
           command: "restore"
-          projects: "$(baseFolder)${projectName}.sln"
+          projects: "$(baseFolder)$(projectName).sln"
           feedsToUse: "config"
           nugetConfigPath: "$(baseFolder)NuGet.Config"
       - task: DotNetCoreCLI@2
         displayName: "Build solution"
         inputs:
-          projects: "$(baseFolder)${projectName}.sln"
-          arguments: "--configuration ${buildConfiguration}"
+          projects: "$(baseFolder)$(projectName).sln"
+          arguments: "--configuration $(buildConfiguration)"
           
