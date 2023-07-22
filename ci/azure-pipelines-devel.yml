@@ -14,6 +14,8 @@ variables:
     value: "apsys.heartbeat"
   - name: buildConfiguration
     value: "Debug"
+  - name: baseFolder
+    value: '/src'
 
 jobs:
   - job: BuildSolution
@@ -25,12 +27,12 @@ jobs:
         displayName: "Restore packages"
         inputs:
           command: "restore"
-          projects: "${{parameters.baseFolder}}${{parameters.projectName}}.sln"
+          projects: "$(baseFolder)${projectName}}.sln"
           feedsToUse: "config"
-          nugetConfigPath: "${{parameters.baseFolder}}NuGet.Config"
+          nugetConfigPath: "$(baseFolder)NuGet.Config"
       - task: DotNetCoreCLI@2
         displayName: "Build solution"
         inputs:
-          projects: "${{parameters.baseFolder}}${{parameters.projectName}}.sln"
-          arguments: "--configuration ${{parameters.buildConfiguration}}"
+          projects: "$(baseFolder)${projectName}}.sln"
+          arguments: "--configuration ${buildConfiguration}"
           
