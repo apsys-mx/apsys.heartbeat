@@ -34,4 +34,4 @@ steps:
     enabled: true
     displayName: "Push packages to Octopus"
     inputs:
-      script: '"ci/octo" push --package="${{parameters.baseFolder}}${{parameters.projectName}}.$(Build.BuildNumber)${{parameters.packageSuffix}}.nupkg" --server="https://apsys-fs-cloud.octopus.app" --space="${{parameters.octopusSpaceName}}" --apiKey="$(OctopusAPIKey)"'
+      script: '"ci/octo" push --package="${{parameters.projectName}}.$(Build.BuildNumber)${{parameters.packageSuffix}}.nupkg" --server="https://apsys-fs-cloud.octopus.app" --space="${{parameters.octopusSpaceName}}" --apiKey="$(OctopusAPIKey)"'
