@@ -26,10 +26,48 @@ stages:
   - stage: Build
     displayName: Build and run static and dynamic tests
     jobs:
+      - job: BuildTestSolution
+        displayName: Build and test solution
+        steps:
+          - checkout: self
+            fetchDepth: 0
+
+          - task: DotNetCoreCLI@2
+            displayName: "Restore packages"
+            inputs:
+              command: "restore"
+              projects: "$(baseFolder)$(projectName).sln"
+              feedsToUse: "config"
+              nugetConfigPath: "$(baseFolder)NuGet.Config"
+
+          - task: SonarCloudPrepare@1
+            displayName: "Prepare code analysis"
+            inputs:
+              SonarCloud: "sonarqube"
+              organization: "apsys-dev"
+              scannerMode: "MSBuild"
+              projectKey: "apsys-dev_apsys-heartbeat"
+              projectName: "apsys-heartbeat"
+
+          - task: DotNetCoreCLI@2
+            displayName: "Build solution"
+            inputs:
+              projects: "$(baseFolder)$(projectName).sln"
+              arguments: "--configuration $(buildConfiguration)"
+
+          - task: SonarCloudAnalyze@1
+            displayName: "Run code analysis"
+            inputs:
+              jdkversion: "JAVA_HOME_11_X64"
+
+          - task: SonarCloudPublish@1
+            displayName: "Publish code analysis result"
+            inputs:
+              pollingTimeoutSec: "300"
 
       - job: PackPushArtifacts
         displayName: Pack and push artifacts
-        #dependsOn: 'BuildTestSolution'
+        dependsOn: 'BuildTestSolution'
         steps:
         - template: pack-push-artifact.yml
           parameters:
