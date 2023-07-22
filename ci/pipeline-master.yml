@@ -10,6 +10,7 @@ pool:
   vmImage: "windows-latest"
 
 variables:
+  - group: project-variables-group
   - name: projectName
     value: "apsys.heartbeat"
   - name: buildConfiguration
@@ -17,9 +18,9 @@ variables:
   - name: baseFolder
     value: "src/"
   - packageSuffix:
-    value: ''
+    value: ""
   - octopusSpaceName:
-    value: 'apsys-mx'
+    value: "apsys-mx"
 
 stages:
   - stage: Build
