@@ -68,12 +68,12 @@ stages:
       - job: PackPushArtifacts
         displayName: Pack and push artifacts
         dependsOn: 'BuildTestSolution'
-        variables:
-          - template: pack-push-artifact.yml
-            parameters:
-              buildConfiguration: $(buildConfiguration)
-              projectName: "$(projectName).webapi"
-              nuGetTitle: "$(projectName) webpi package"
-              nuGetDescription: "Package of the $(projectName) webapi project"
-              packageSuffix: $(packageSuffix)
-              octopusSpaceName: $(octopusSpaceName)
+        extends:
+        - template: pack-push-artifact.yml
+          parameters:
+            buildConfiguration: $(buildConfiguration)
+            projectName: "$(projectName).webapi"
+            nuGetTitle: "$(projectName) webpi package"
+            nuGetDescription: "Package of the $(projectName) webapi project"
+            packageSuffix: $(packageSuffix)
+            octopusSpaceName: $(octopusSpaceName)
