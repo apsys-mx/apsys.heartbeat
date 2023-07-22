@@ -68,7 +68,7 @@ stages:
       - job: PackPushArtifacts
         displayName: Pack and push artifacts
         dependsOn: 'BuildTestSolution'
-        extends:
+        steps:
         - template: pack-push-artifact.yml
           parameters:
             buildConfiguration: $(buildConfiguration)
