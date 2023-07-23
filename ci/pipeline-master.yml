@@ -78,3 +78,12 @@ stages:
             packageSuffix: $(packageSuffix)
             octopusSpaceName: $(octopusSpaceName)
             baseFolder: $(baseFolder)
+        - template: pack-push-artifact.yml
+          parameters:
+            buildConfiguration: $(buildConfiguration)
+            projectName: "$(projectName).migrations"
+            nuGetTitle: "$(projectName) migrations package"
+            nuGetDescription: "Package of the $(projectName) migrations project"
+            packageSuffix: $(packageSuffix)
+            octopusSpaceName: $(octopusSpaceName)
+            baseFolder: $(baseFolder)
